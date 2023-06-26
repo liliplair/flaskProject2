@@ -1,8 +1,4 @@
 from imbox import Imbox
-from flask import Flask, render_template, request, redirect, session
-# 智能反垃圾邮件识别系统
-app = Flask(__name__)
-app.config.from_object('settings.DevelopmentConfig')
 
 
 class Mail:
@@ -23,7 +19,7 @@ class Mail:
     def read_mails(self):
         def simplify_text(str0):
             return str0
-        if mail.mails :
+        if self.mails :
             return
         with Imbox(self.imap, self.address, self.password, ssl=True) as imbox:
             # unread=True 表示只列出未读信息
@@ -62,35 +58,3 @@ class Mail:
         with Imbox(self.imap, self.address, self.password, ssl=True) as imbox:
             imbox.delete(uid)
         del self.mails[index]
-
-
-# 登录后从数据库读取用户信息
-def get_userinfo():
-    pass
-    address = "1295476850@qq.com"
-    password = "qhdskagavvxijbaj"
-    imap = 'imap.qq.com'
-    return imap, address, password
-
-
-imap, add, pwd = get_userinfo()
-mail = Mail(imap, add, pwd)
-
-
-@app.route('/getmail')
-# @app.route('/refresh')
-def getmail():
-    mail.read_mails()
-    return render_template('getmail.html', mails=mail.mails)
-
-
-@app.route("/showmail")
-def showmail():
-    # 登陆判定
-    index = int(request.args.get('index'))
-    detail = mail.mails.get(index)
-    return render_template('showmail.html', detail=detail)
-
-
-if __name__ == "__main__":
-    app.run()

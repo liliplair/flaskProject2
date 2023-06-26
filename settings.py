@@ -1,3 +1,5 @@
+# 不同环境下的配置文件
+
 class Config(object):
     DEBUG = False
     TESTING = False
@@ -17,3 +19,14 @@ class DevelopmentConfig(Config):
 # 测试环境
 class TestingConfig(Config):
     TESTING = True
+
+#数据库连接配置
+import pymysql
+
+conn = pymysql.connect(
+        host='localhost',
+        port=3306,
+        user='root',
+        password='liliplair',
+        database='mail'
+    )
